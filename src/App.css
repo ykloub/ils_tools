@@ -1,0 +1,56 @@
+/* Base Styles
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 20px;
+} */
+
+/* Container */
+/* .container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+} */
+
+/* Input Field */
+/* .container input[type="text"] {
+  width: 70%; 
+  padding: 10px;
+  margin-right: 10px;
+  border: 2px solid #007bff; 
+  border-radius: 4px 0 0 4px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; 
+} */
+
+/* .container input[type="text"]:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); 
+} */
+
+/* Submit Button */
+/* .container button {
+  padding: 10px 20px;
+  border: none; 
+  background-color: #007bff; 
+  color: #ffffff; 
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0; 
+  transition: background-color 0.2s, box-shadow 0.2s; 
+} */
+
+/* .container button:hover {
+  background-color: #0056b3; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+} */
+
+/* Error Message */
+/* .container div {
+  color: #ff0000; 
+  margin-top: 10px;
+} */
