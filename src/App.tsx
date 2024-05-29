@@ -239,7 +239,7 @@ const App: React.FC = () => {
         <div className="mb-3">
           <div className="col-sm-4">
             <label htmlFor="holdingHRID" className="form-label mb-2">
-              Enter Holding HRID XXX
+              Enter Holding HRID
             </label>
             <input
               className="form-control"
