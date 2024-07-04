@@ -5,6 +5,7 @@ import "./App.css";
 
 const App: React.FC = () => {
   const [value, setValue] = useState<string>("");
+  const [token, setToken] = useState<string>("");
   const [valueCallNumber, setValueCallNumber] = useState<string>("");
   const [valueSuffixCallNumber, setValueSuffixCallNumber] =
     useState<string>("");
@@ -19,15 +20,14 @@ const App: React.FC = () => {
 
   const headers = {
     "Content-Type": "application/json",
-    "x-okapi-tenant": "dct",
-    "x-okapi-token":
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJsaWJfYWRtaW4iLCJ0eXBlIjoibGVnYWN5LWFjY2VzcyIsInVzZXJfaWQiOiI1MjI4YTQ0YS03MDc0LTRiYmQtOWM4Mi0zMzIwMjc2NTU1M2QiLCJpYXQiOjE3MTYyNzYzNDMsInRlbmFudCI6ImRjdCJ9.paaY-LtoZ_t5e1WipRIfclOtn9PmPybGium5x7JLZtg",
+    "x-okapi-tenant": "dctuae",
+    "x-okapi-token": token,
   };
 
   const handleCheck = async () => {
     setIsLoading(true);
     await fetch(
-      `https://okapi-uae.ils.medad.com/search/instances?expandAll=true&limit=30&query=(holdings.hrid=="${value}")`,
+      `https://okapi-uae-cls01.ils.medad.com/search/instances?expandAll=true&limit=30&query=(hrid=="${value}")`,
       { headers }
     )
       .then((response) => {
@@ -75,7 +75,7 @@ const App: React.FC = () => {
         holdings.map((hold: any) => {
           handleHoldingDetails(hold.id);
         });
-        //setError([]);
+        setError([]);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -86,7 +86,7 @@ const App: React.FC = () => {
   const handleHoldingDetails = async (id: string) => {
     setIsLoading(true);
     await fetch(
-      `https://okapi-uae.ils.medad.com/holdings-storage/holdings/${id}`,
+      `https://okapi-uae-cls01.ils.medad.com/holdings-storage/holdings/${id}`,
       {
         headers,
       }
@@ -113,7 +113,7 @@ const App: React.FC = () => {
   };
   const handleItemsDetails = async (id: string) => {
     setIsLoading(true);
-    await fetch(`https://okapi-uae.ils.medad.com/inventory/items/${id}`, {
+    await fetch(`https://okapi-uae-cls01.ils.medad.com/inventory/items/${id}`, {
       headers,
     })
       .then((response) => {
@@ -137,7 +137,7 @@ const App: React.FC = () => {
       setIsLoading(true);
       // Fetch item details
       const response = await fetch(
-        `https://okapi-uae.ils.medad.com/inventory/items/${id}`,
+        `https://okapi-uae-cls01.ils.medad.com/inventory/items/${id}`,
         { headers }
       );
       if (!response.ok) {
@@ -155,7 +155,7 @@ const App: React.FC = () => {
       itemsRecords.effectiveCallNumberComponents.suffix = valueSuffixCallNumber;
 
       const updateResponse = await fetch(
-        `https://okapi-uae.ils.medad.com/inventory/items/${itemsRecords.id}`,
+        `https://okapi-uae-cls01.ils.medad.com/inventory/items/${itemsRecords.id}`,
         {
           method: "PUT",
           headers,
@@ -191,7 +191,7 @@ const App: React.FC = () => {
           holding.callNumber = valueCallNumber;
           holding.callNumberSuffix = valueSuffixCallNumber;
           const response = await fetch(
-            `https://okapi-uae.ils.medad.com/holdings-storage/holdings/${holding.id}`,
+            `https://okapi-uae-cls01.ils.medad.com/holdings-storage/holdings/${holding.id}`,
             {
               method: "PUT",
               headers,
@@ -237,9 +237,21 @@ const App: React.FC = () => {
       {isLoading && <LoadingOverlay />}
       <div className="row">
         <div className="mb-3">
+        <div className="col-sm-12">
+            <label htmlFor="token" className="form-label mb-2">
+              Enter Medad Token <a href="https://dct.ils.medad.com/settings/developer/token" target="_blank">Find here</a>
+            </label>
+            <input
+              className="form-control"
+              id="token"
+              type="text"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+            />
+          </div>
           <div className="col-sm-4">
             <label htmlFor="holdingHRID" className="form-label mb-2">
-              Enter Holding HRID
+              Enter Instance HRID
             </label>
             <input
               className="form-control"
