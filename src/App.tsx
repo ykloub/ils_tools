@@ -487,7 +487,6 @@ const App: React.FC = () => {
           </button>
         </div>
       </div>
-      {/* <hr /> */}
       <div className="row">
         {instanceData.length > 0 && (
           <div className="col-sm-12  alert alert-success">
@@ -495,9 +494,6 @@ const App: React.FC = () => {
             <h6>{instanceData.map((instance, index) => instance.title)}</h6>
           </div>
         )}
-        {/* <p>
-          <hr />
-        </p> */}
         {holdingDetails.length > 0 && (
           <div className="col-sm-12 alert alert-dark">
             <div className="row ">
@@ -542,7 +538,7 @@ const App: React.FC = () => {
                     <strong style={{ marginRight: "10px" }}>Location: </strong>
                     <select
                       className="form-control"
-                      style={{ width: "auto", flexGrow: 0 }}
+                      // style={{ width: "auto", flexGrow: 1 }}
                       value={holding.permanentLocationId}
                       onChange={(e) => {
                         const updatedHoldings = holdingDetails.map((h) => {
