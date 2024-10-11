@@ -309,7 +309,7 @@ const InventoryList: React.FC = () => {
     const blob = new Blob([excelBuffer], {
       type: "application/octet-stream",
     });
-    saveAs(blob, "HoldingsSummary_" + new Date().toISOString() + ".xlsx");
+    saveAs(blob, "Inventory_" + new Date().toISOString() + ".xlsx");
   };
 
   const handleDownloadSummery = () => {
@@ -332,7 +332,7 @@ const InventoryList: React.FC = () => {
     const blob = new Blob([excelBuffer], {
       type: "application/octet-stream",
     });
-    saveAs(blob, "inventory_" + new Date().toISOString() + ".xlsx");
+    saveAs(blob, "HoldingsSummary_" + new Date().toISOString() + ".xlsx");
   };
 
   useEffect(() => {
@@ -494,7 +494,7 @@ const InventoryList: React.FC = () => {
                         holding.status === "Cleared"
                           ? "lightgreen"
                           : holding.status === "All Discarded"
-                          ? "lightred"
+                          ? "#ffbbbb"
                           : "lightyellow",
                     }}
                   >

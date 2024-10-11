@@ -103,6 +103,16 @@ const BusDiscarding: React.FC = () => {
     localStorage.setItem("busTableData", JSON.stringify(updatedItems));
   };
 
+  const handleClearTable = () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to clear the entire table?"
+    );
+    if (confirmed) {
+      setLocalStorageData([]);
+      localStorage.removeItem("busTableData");
+    }
+  };
+
   return (
     <div className="App">
       <input
@@ -113,6 +123,9 @@ const BusDiscarding: React.FC = () => {
       />
       <button className="btn btn-info" onClick={handleDownloadExcel}>
         Download as Excel
+      </button>
+      <button className="btn btn-danger" onClick={handleClearTable}>
+        Clear Table
       </button>
       {message && <p style={{ color: "red" }}>{message}</p>}
       <table>
