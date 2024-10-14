@@ -43,7 +43,7 @@ html {
   }
 }
 .App {
-  font-family: "Cairo", Arial, sans-serif;
+  font-family: "Cairo", Arial, sans-serif !important;
   padding: 15px 10px 10px 10px;
   max-width: 1500px;
   margin: auto;
