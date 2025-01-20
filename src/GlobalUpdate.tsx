@@ -45,11 +45,18 @@ const GlobalUpdate: React.FC = () => {
     noteTypeId: string;
     note: string;
   }
+
+  interface LocalMaterialType {
+    holdingID: string;
+    mTypeID: string;
+    mTypeName: string;
+  }
+
   const [value, setValue] = useState<string>("");
   const [token, setToken] = useState<any>("");
   const [valueCallNumber, setValueCallNumber] = useState<string>("");
   const [valueSuffixCallNumber, setValueSuffixCallNumber] =
-    useState<string>("Empty");
+    useState<string>("Default");
   const [valueNotes, setValueNotes] = useState<NoteList[]>([]);
   const [instanceData, setInstanceData] = useState<any[]>([]);
   const [itemData, setItemData] = useState<any[]>([]);
@@ -58,6 +65,9 @@ const GlobalUpdate: React.FC = () => {
   const [itemDetails, setItemDetails] = useState<Item[]>([]);
   const [locations, setLocations] = useState<any[]>([]);
   const [mTypes, setMTypes] = useState<any[]>([]);
+  const [localMaterialType, setLocalMaterialType] = useState<
+    LocalMaterialType[]
+  >([]);
 
   const [error, setError] = useState<any[]>([]);
   const [message, setMessage] = useState("");
@@ -75,7 +85,7 @@ const GlobalUpdate: React.FC = () => {
     fetchMTypes();
 
     setValueCallNumber("");
-    setValueSuffixCallNumber("Empty");
+    setValueSuffixCallNumber("Default");
     setValueNotes([]);
     setInstanceData([]);
     setItemData([]);
@@ -232,12 +242,17 @@ const GlobalUpdate: React.FC = () => {
         itemsRecords.itemLevelCallNumber = valueCallNumber;
         itemsRecords.effectiveCallNumberComponents.callNumber = valueCallNumber;
       }
-      if (valueSuffixCallNumber !== "Empty") {
+      if (valueSuffixCallNumber !== "Default") {
         itemsRecords.itemLevelCallNumberSuffix = valueSuffixCallNumber;
         itemsRecords.effectiveCallNumberComponents.suffix =
           valueSuffixCallNumber;
       }
-      holdingData.map((holding: any) => {
+      if (valueSuffixCallNumber === "Empty") {
+        itemsRecords.itemLevelCallNumberSuffix = "";
+        itemsRecords.effectiveCallNumberComponents.suffix = "";
+      }
+      holdingDetails.map((holding: any) => {
+        //Update Item Location
         if (holding.id === itemsRecords.holdingsRecordId) {
           locations.map((location: any) => {
             if (location.id === holding.permanentLocationId) {
@@ -248,6 +263,16 @@ const GlobalUpdate: React.FC = () => {
               itemsRecords.effectiveLocation = {
                 id: location.id,
                 name: location.name,
+              };
+            }
+          });
+          //Update Item Material Type
+          localMaterialType.map((localMaterialType: LocalMaterialType) => {
+            console.log(localMaterialType);
+            if (localMaterialType.holdingID === holding.id) {
+              itemsRecords.materialType = {
+                id: localMaterialType.mTypeID,
+                name: localMaterialType.mTypeName,
               };
             }
           });
@@ -295,6 +320,7 @@ const GlobalUpdate: React.FC = () => {
     }
     setIsLoading(false);
   };
+
   const handleUpdate = async () => {
     setIsLoading(true);
     try {
@@ -313,8 +339,11 @@ const GlobalUpdate: React.FC = () => {
           if (valueCallNumber !== "") {
             holding.callNumber = valueCallNumber;
           }
-          if (valueSuffixCallNumber !== "Empty") {
+          if (valueSuffixCallNumber !== "Default") {
             holding.callNumberSuffix = valueSuffixCallNumber;
+          }
+          if (valueSuffixCallNumber === "Empty") {
+            holding.callNumberSuffix = "";
           }
           const response = await fetch(
             `https://okapi-uae-cls01.ils.medad.com/holdings-storage/holdings/${holding.id}`,
@@ -458,6 +487,30 @@ const GlobalUpdate: React.FC = () => {
     }
   };
 
+  const handleSelectChange = (
+    holdingID: string,
+    mTypeID: string,
+    mTypeName: string
+  ) => {
+    setLocalMaterialType((prevData) => {
+      // Check if holdingID exists in the array
+      const existingIndex = prevData.findIndex(
+        (item) => item.holdingID === holdingID
+      );
+
+      if (existingIndex !== -1) {
+        // Update the existing object
+        const updatedData = [...prevData];
+        updatedData[existingIndex].mTypeID = mTypeID;
+        updatedData[existingIndex].mTypeName = mTypeName;
+        return updatedData;
+      } else {
+        // Add a new object
+        return [...prevData, { holdingID, mTypeID, mTypeName }];
+      }
+    });
+  };
+
   return (
     <div
       className="container mt-4 themed-container"
@@ -594,23 +647,16 @@ const GlobalUpdate: React.FC = () => {
                     </strong>
                     <select
                       className="form-control"
-                      // style={{ width: "auto", flexGrow: 1 }}
-                      // value={itemData.permanentLocationId}
-                      // onChange={(e) => {
-                      //   const updatedHoldings = holdingDetails.map((h) => {
-                      //     if (h.id === holding.id) {
-                      //       return {
-                      //         ...h,
-                      //         permanentLocationId: e.target.value,
-                      //       };
-                      //     }
-                      //     return h;
-                      //   });
-                      //   setHoldingDetails(updatedHoldings);
-                      // }}
+                      onChange={(e) =>
+                        handleSelectChange(
+                          holding.id,
+                          e.target.value,
+                          e.target.options[e.target.selectedIndex].text
+                        )
+                      }
                     >
-                      <option key="0" value="Empty">
-                        *Empty* for not change value
+                      <option key="0" value="Default">
+                        *Default* for not change value
                       </option>
                       {mTypes.map((mType) => (
                         <option key={mType.id} value={mType.id}>
@@ -750,8 +796,8 @@ const GlobalUpdate: React.FC = () => {
                   value={valueSuffixCallNumber}
                   onChange={(e) => setValueSuffixCallNumber(e.target.value)}
                 >
-                  <option key="0" value="Empty">
-                    *Empty* for not change value
+                  <option key="0" value="Default">
+                    *Default* for not change value
                   </option>
                   <option key="1" value="AV">
                     Audio Visual
@@ -776,6 +822,9 @@ const GlobalUpdate: React.FC = () => {
                   </option>
                   <option key="8" value="THESES">
                     Theses
+                  </option>
+                  <option key="9" value="Empty">
+                    Remove Suffix
                   </option>
                 </select>
               </div>

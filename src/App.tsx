@@ -3,12 +3,14 @@ import React, { useState } from "react";
 import GlobalUpdate from "./GlobalUpdate";
 import InventoryList from "./InventoryList";
 import BusesList from "./BusesList";
+import ShaikhaList from "./ShaikhaList";
 import "./InventoryList.css";
 
 const App: React.FC = () => {
   const [showGlobalUpdate, setShowGlobalUpdate] = useState(false);
   const [showInventoryList, setShowInventoryList] = useState(false);
   const [showBusesList, setShowBusesList] = useState(false);
+  const [showShaikhaList, setShowShaikhaList] = useState(false);
 
   return (
     <div
@@ -25,6 +27,7 @@ const App: React.FC = () => {
           if (!showGlobalUpdate) {
             setShowInventoryList(false); // If inventory list is shown, hide it
             setShowBusesList(false);
+            setShowShaikhaList(false);
           }
           setShowGlobalUpdate(!showGlobalUpdate);
         }}
@@ -39,6 +42,7 @@ const App: React.FC = () => {
           if (!showInventoryList) {
             setShowGlobalUpdate(false); // If GlobalUpdate is shown, hide it
             setShowBusesList(false);
+            setShowShaikhaList(false);
           }
           setShowInventoryList(!showInventoryList);
         }}
@@ -54,6 +58,7 @@ const App: React.FC = () => {
           if (!showBusesList) {
             setShowGlobalUpdate(false); // If GlobalUpdate is shown, hide it
             setShowInventoryList(false);
+            setShowShaikhaList(false);
           }
           setShowBusesList(!showBusesList);
         }}
@@ -64,9 +69,25 @@ const App: React.FC = () => {
         Buses List
       </button>
 
+      <button
+        onClick={() => {
+          if (!showShaikhaList) {
+            setShowGlobalUpdate(false); // If GlobalUpdate is shown, hide it
+            setShowInventoryList(false);
+            setShowBusesList(false);
+          }
+          setShowShaikhaList(!showShaikhaList);
+        }}
+        className={
+          showShaikhaList ? "btn btn-dark mt-2" : "btn btn-outline-dark mt-2"
+        }
+      >
+        Shaikha List
+      </button>
       {showGlobalUpdate && <GlobalUpdate />}
       {showInventoryList && <InventoryList />}
       {showBusesList && <BusesList />}
+      {showShaikhaList && <ShaikhaList />}
       <footer
         className="d-flex flex-wrap justify-content-between align-items-center border-top"
         style={{ paddingBottom: "0.8rem" }}
